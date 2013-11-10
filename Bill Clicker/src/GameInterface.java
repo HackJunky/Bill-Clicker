@@ -1,12 +1,6 @@
+import javax.swing.JFrame;
 
-public class GameInterface {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
-
+public class GameInterface extends JFrame{
+	
 }
