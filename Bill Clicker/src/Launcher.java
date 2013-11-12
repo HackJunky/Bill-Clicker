@@ -29,7 +29,7 @@ public class Launcher extends JFrame{
 	private JTextField textField_2;
 
 	public static void main(String[] args) {
-		new Launcher();
+		new GameInterface();
 	}
 	
 	public Launcher() {
