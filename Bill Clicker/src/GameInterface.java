@@ -107,12 +107,7 @@ public class GameInterface extends JFrame{
 			"British people just make my day.",
 			"Garrison has the most beautiful eyes.",
 			"100111000111010101110001111011 -- Look I'm speaking in binary.",
-			"Bill Clicker is the only reason I come to teach anymore.",
-			"Thanks Obama!",
-			"Mitt Romney hates Sesame Street.",
-			"...",
-			"You just got #sweaved.",
-			"In a galaxy far, far away..."
+			"Bill Clicker is the only reason I come to teach anymore."
 	};
 
 	private String[] nameList = {
@@ -128,7 +123,6 @@ public class GameInterface extends JFrame{
 	//Begin Class Instances Region
 	private WorldTimer gameHandle;
 	private Timer gameTimer;
-	private NetworkManager networkHandle;
 
 	public GameInterface() {
 		//Begin Store Entries Region
@@ -304,7 +298,11 @@ public class GameInterface extends JFrame{
 
 			g2d.setFont(new Font("Comic Sans MS", Font.PLAIN, 16));
 			fm = g2d.getFontMetrics();
-			g2d.setColor(Color.RED);
+			if (storeEntries.get(cTile).getCost() > totalAppeal) {
+				g2d.setColor(Color.RED);
+			}else {
+				g2d.setColor(Color.GREEN);
+			}
 
 			Rectangle tileLoc = new Rectangle(billPurchaseArea.x + 48, billPurchaseArea.y + (billPurchaseArea.height / 8) + (cTile * storeTile.getHeight()) + fm.getHeight() + 15, 30, 16);
 			if (storeEntries.get(cTile).isMouseOver()) {
@@ -447,134 +445,6 @@ public class GameInterface extends JFrame{
 		@Override
 		public void mouseReleased(MouseEvent arg0) {
 
-		}
-	}
-
-	public class NetworkManager implements Runnable {
-		private boolean isServer;
-		private String ip;
-		private int port;
-		private String password;
-		private int id;
-		private String username;
-
-		private ServerSocket serverSocket;
-		private Socket socket;
-		private ObjectInputStream in;
-		private ObjectOutputStream out;
-
-		private boolean terminated = false;
-		private boolean connected = false;
-		private int overhead = 0;
-
-		public NetworkManager(boolean isServer, String ip, int port, String password, String username) {
-			this.isServer = isServer;
-			this.ip = ip;
-			this.port = port;
-			this.password = password;
-			this.username = username;
-			this.id = username.hashCode();
-		}
-
-
-		@Override
-		public void run() {
-			if (isServer) {
-				if (!terminated) {
-					try {
-						try {
-							serverSocket = new ServerSocket();
-							serverSocket.bind(new InetSocketAddress(ip, port));
-						} catch (IOException ex) {
-							return;
-						}
-						socket = null;
-						try {
-							socket = serverSocket.accept();
-						} catch (IOException ex) {
-							return;
-						}
-						while (!terminated) {
-							connected = socket.isConnected();
-							if (out == null) {
-								out = new ObjectOutputStream(socket.getOutputStream());
-							}
-							if (in == null) {
-								in = new ObjectInputStream(socket.getInputStream());
-							}
-							//Read changes first
-//							input = (ArrayList<Block>)in.readObject();
-//							decode();
-//
-//							//Write changes back
-//							encode();
-//							out.writeObject(output);
-						}
-					}catch (Exception ex) {
-						if (!terminated) {
-							ex.printStackTrace();
-							terminated = true;
-						}
-						try {
-							out.flush();
-						}catch (Exception e) {
-							terminated = true;
-						}
-					}
-				}
-			}else {
-				if (!terminated) {
-					try {
-						while (!terminated) {
-							connected = socket.isConnected();
-							if (out == null) {
-								out = new ObjectOutputStream(socket.getOutputStream());
-							}
-							if (in == null) {
-								in = new ObjectInputStream(socket.getInputStream());
-							}
-//							//Write changes first
-//							encode();
-//							out.writeObject(output);
-//
-//							//Read changes back
-//							worldCycle = (int)in.readObject();
-//							decode();
-						}
-					}catch (Exception ex) {
-						if (!terminated) {
-							ex.printStackTrace();
-							terminated = true;
-						}
-						try {
-							out.flush();
-						}catch (Exception e) {
-							terminated = true;
-						}
-					}
-				}
-			}
-		}
-
-		public void encode() {
-			try {
-
-			}catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-		public void decode() {
-			try {
-
-			}catch (Exception e) {
-				e.printStackTrace();
-
-			}
-		}
-
-		public boolean isConnected() {
-			return connected;
 		}
 	}
 }
