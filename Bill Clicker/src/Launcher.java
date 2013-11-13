@@ -69,6 +69,12 @@ public class Launcher extends JFrame{
 		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		
 		btnStartGame = new JButton("Start Game");
+		btnStartGame.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				new GameInterface();
+			}
+		});
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
