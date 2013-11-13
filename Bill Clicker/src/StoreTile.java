@@ -2,11 +2,7 @@ import java.awt.Rectangle;
 
 
 public class StoreTile {
-	enum TileName {
-		Public_Advertisers, Advanced_Adertisement, Partisan_Campaigns, House_Assists, Congress_Assists, Presidential_Assists
-	};
-	
-	private TileName thisName;
+	private String thisName;
 	private int thisCost;
 	private int thisAppeal;
 	private float thisInflation;
@@ -15,7 +11,7 @@ public class StoreTile {
 	private Rectangle location = null;
 	private boolean mouseOver = false;
 	
-	public StoreTile(TileName name, int cost, int appeal, float inflation) {
+	public StoreTile(String name, int cost, int appeal, float inflation) {
 		thisName = name;
 		thisCost = cost;
 		thisAppeal = appeal;
@@ -56,10 +52,6 @@ public class StoreTile {
 	}
 	
 	public String getName() {
-		return thisName.toString();
-	}
-	
-	public TileName getType() {
 		return thisName;
 	}
 	

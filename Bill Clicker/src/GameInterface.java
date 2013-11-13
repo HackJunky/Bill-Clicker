@@ -17,6 +17,8 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.Timer;
@@ -54,38 +56,67 @@ public class GameInterface extends JFrame{
 	//Begin Bill Definitions Region
 	private int appealPerSecond = 0;
 	private int appealPerClick = 1;
-	private int totalAppeal = 0;
+	private int totalAppeal = 1000;
 
 	//Begin UI Strings Region
-	private String status = "You feel like passing a bill, but no one wants to listen.";
+	private String status = "You feel like passing a bill, but no one wants to hear about your bill.";
+	private String name = "Weaver";
 	private String[] statusList = {
-			"You feel like passing a bill, but no one wants to listen.",
-			"People are beginning to note your thoughts.. just barely.",
-			"It looks like someone has taken notice of you.",
-			"A few more people are becoming interested.",
-			"'If only this bill was more appealing.', comments a Citizen.",
-			"Well let's see what you think when I PWN YOU N00B BCUZ IM #SWEAVER2013. HOLLA.",
-			"There is a pretty good chance the bill will get Sweaved.",
-			"The chance lessens of the bill getting Sweaved.",
-			"You bill is presented on the floor of the House..."
+			"You feel like passing a bill, but no one wants to hear about your bill.",
+			"I <3 'MERICA.",
+			"Comic Sans MS is the greatest font invented.",
+			"COMIC SANS? I AM COMIC SANS!!",
+			"Cookie Clicker is the most intellectually stimulating game ever.",
+			"Jad's humor is not only witty, but also beautifully executed.",
+			"Of course I carry a pocket constitution!",
+			"#swerve",
+			"I think that JDaddy Comic Sans is an excellent programmer.",
+			"Bill Clicker deserves an A.",
+			"Sweaving people is a huge perk of my job.",
+			"Don't you hate it when you're friends use the wrong grammar?",
+			"Just finished cooking.. get me the camera.",
+			"Looks like we got Idaho's votes... all 4 of them.",
+			"Of course she's going to complain.. she's a girl!",
+			"Wut wut, wut, wut, wut wut, wut wut, wut, wut, wut wut...",
+			"I don't always wear my grill and chains.",
+			"IT'S MY MONEY AND I NEED IT NOW! (877-CASH-NOW)",
+			"I found all my role models in 'White Chicks'.",
+			"Swag.",
+			"I wish I had said something of value to quote..",
+			"It is an honor to be quoted by this game.",
+			"Yeah, I represent my district. What are ya gonna do 'bout it?",
+			"Such bills. So much pass. So appeal. Wow.",
+			"My iPod is a variety of Taylor Swift and Based God.",
+			"What do you mean you didn't vote?!?"
 	};
-
+	
+	private String[] nameList = {
+			"Weaver",
+			"Sweaver",
+			"SweaveDaddy",
+			"WeaveDaddy",
+			"Weaver 'The Sans' Daddy",
+			"Uncle Sweaver"
+	};
+ 
 	//Begin Class Instances Region
 	private WorldTimer gameHandle;
 	private Timer gameTimer;
 	private NetworkManager networkHandle;
 
-
 	public GameInterface() {
 		//Begin Store Entries Region
 		storeEntries = new ArrayList<StoreTile>();
-
-		storeEntries.add(new StoreTile(StoreTile.TileName.Public_Advertisers, 100, 1, 0.05f));
-		storeEntries.add(new StoreTile(StoreTile.TileName.Advanced_Adertisement, 200, 2, 0.1f));
-		storeEntries.add(new StoreTile(StoreTile.TileName.Partisan_Campaigns, 400, 4, 0.2f));
-		storeEntries.add(new StoreTile(StoreTile.TileName.House_Assists, 800, 8, 0.2f));
-		storeEntries.add(new StoreTile(StoreTile.TileName.Congress_Assists, 1600, 16, 0.3f));
-		storeEntries.add(new StoreTile(StoreTile.TileName.Presidential_Assists, 3200, 32, 0.3f));
+		storeEntries.add(new StoreTile("Supporters", 100, 1, 0.05f));
+		storeEntries.add(new StoreTile("Weaver", 200, 2, 0.1f));
+		storeEntries.add(new StoreTile("Public Support", 400, 4, 0.2f));
+		storeEntries.add(new StoreTile("Committee Approval", 800, 8, 0.2f));
+		storeEntries.add(new StoreTile("S. of the House Approval", 1600, 16, 0.3f));
+		storeEntries.add(new StoreTile("Law Maker Approval", 3200, 32, 0.3f));
+		storeEntries.add(new StoreTile("Senate Approval", 6400, 32, 0.4f));
+		storeEntries.add(new StoreTile("Advanced Campaigning", 128000, 32, 0.4f));
+		storeEntries.add(new StoreTile("Presidential Approval", 256000, 32, 0.5f));
+		storeEntries.add(new StoreTile("Luck", 512000, 32, 0.6f));
 
 		//Begin Drawing Definitions Region
 		billClickerArea = new Rectangle(0, 0, WINDOW_SIZE_X / 4, WINDOW_SIZE_Y);
@@ -165,6 +196,12 @@ public class GameInterface extends JFrame{
 		//Draw Bill Region
 		g2d.drawImage(billImage, billClickerButton.x - billClickerButtonMOD, billClickerButton.y - billClickerButtonMOD, billClickerButton.width + (billClickerButtonMOD * 2), billClickerButton.height + (billClickerButtonMOD * 2), this);
 		g2d.drawImage(textGradient, 0, billClickerButton.y + (billClickerButton.height / 8), billClickerArea.width, 64, this);
+		
+		g2d.setColor(Color.WHITE);
+		g2d.setFont(new Font("Comic Sans MS", Font.BOLD, 36));
+		for (FloatingText f : floatingText) {
+			g2d.drawString(f.getText(), f.getLocation().x, f.getLocation().y);
+		}
 
 		//Begin Text Region A
 		g2d.setColor(Color.WHITE);
@@ -189,7 +226,8 @@ public class GameInterface extends JFrame{
 		//Begin Text Region B
 		g2d.setFont(new Font("Comic Sans MS", Font.PLAIN, 18));
 		fm = g2d.getFontMetrics();
-		g2d.drawString(status, billStatsArea.x + (billStatsArea.width / 2) - (fm.stringWidth(status) / 2), fm.getAscent() + 5);
+		String message = "'" + status + "' -" + name + "2013";
+		g2d.drawString(message, billStatsArea.x + (billStatsArea.width / 2) - (fm.stringWidth(message) / 2), fm.getAscent() + 5);
 
 		//Begin Shop Region
 		numHor = billPurchaseArea.width / GRAD_SIZE_X;
@@ -260,7 +298,8 @@ public class GameInterface extends JFrame{
 	public class WorldTimer implements ActionListener, MouseListener {
 		public Point cursorCoords;
 		public boolean leftClick;
-		private int tick = 0;
+		private int time;
+		private int statusTicks = 0;
 		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
@@ -269,6 +308,20 @@ public class GameInterface extends JFrame{
 			//Begin Game Drawing Region
 			draw();
 
+			//Begin Game Time Regions
+			if (Calendar.getInstance().get(Calendar.SECOND) > time) {
+				totalAppeal += appealPerSecond;
+				statusTicks++;
+				time = Calendar.getInstance().get(Calendar.SECOND);
+			}
+			
+			//Begin Time Taking Region
+			if (statusTicks == 6) {
+				status = statusList[new Random().nextInt(statusList.length)];
+				name = nameList[new Random().nextInt(nameList.length)];
+				statusTicks = 0;
+			}
+			
 			if (cursorCoords != null) {
 				if (billClickerButton.contains(cursorCoords) && billClickerButtonMOD == 5) {
 					if (leftClick) {
@@ -285,26 +338,43 @@ public class GameInterface extends JFrame{
 				}else if (!billClickerButton.contains(cursorCoords) && billClickerButtonMOD > 0){
 					billClickerButtonMOD -= 1;
 				}
-				appealPerSecond = 0;
+				int totalOwned = 0;
 				for (StoreTile s : storeEntries) {
 					if (s.getLocation().contains(cursorCoords)) {
 						s.setMouseOver(true);
 						if (leftClick && totalAppeal >= s.getCost()) {
+							totalAppeal -= s.getCost();
 							s.buyItem();
 						}
 					}else {
 						s.setMouseOver(false);
 					}
-					appealPerSecond += (s.getAppeal() * s.getOwned());
+					totalOwned += s.getOwned();
 				}
-				if (tick == 1000) {
-					totalAppeal += appealPerSecond;
-					tick = 0;
+				if (totalOwned > 2) {
+					appealPerClick = totalOwned / 2;
+				}else {
+					appealPerClick = 1;
 				}
 			}
+			
+			for (int i = 0; i < floatingText.size(); i++) {
+				FloatingText f = floatingText.get(i);
+				if (f.isDone()) {
+					floatingText.remove(i);
+				}else {
+					f.flutter();
+				}
+			}
+			
+			//Begin Appeal Population Region
+			appealPerSecond = 0;
+			for (StoreTile s : storeEntries) {
+				appealPerSecond += (s.getAppeal() * s.getOwned());
+			}
+			
 			cursorCoords = GameInterface.this.getMousePosition();	
 			leftClick = false;
-			tick++;
 		}
 
 		@Override

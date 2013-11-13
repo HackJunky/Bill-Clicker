@@ -15,12 +15,24 @@ public class FloatingText {
 	public void flutter() {
 		boolean direction = new Random().nextBoolean();
 		if (direction) {
-			location = new Point (location.x + 1, location.y - 1);
+			location = new Point (location.x + 1, location.y - 2);
 		}else {
-			location = new Point (location.x - 1, location.y - 1);
+			location = new Point (location.x - 1, location.y - 2);
 		}
 		if (location.y < 0) {
 			done = true;
 		}
+	}
+	
+	public String getText() {
+		return text;
+	}
+	
+	public Point getLocation() {
+		return location;
+	}
+	
+	public boolean isDone() {
+		return done;
 	}
 }
