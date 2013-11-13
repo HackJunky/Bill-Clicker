@@ -96,7 +96,18 @@ public class GameInterface extends JFrame{
 			"Yeah, I represent my district. What are ya gonna do 'bout it?",
 			"Such bills. So much pass. So appeal. Wow.",
 			"My iPod is a variety of Taylor Swift and Based God.",
-			"What do you mean you didn't vote?!?"
+			"What do you mean you didn't vote?!?",
+			"What kind of person lives in Modesto anyway?",
+			"What do the people of Modesto and Danville have in common? ... Nothing.",
+			"Your vote does count!",
+			"Wow, look at this news article I posted on my twitter.",
+			"#SWEAVED",
+			"Did your computer just shut down? Oh, what a shame!",
+			"The Farmers of the Constitution were great men.",
+			"British people just make my day.",
+			"Garrison has the most beautiful eyes.",
+			"100111000111010101110001111011 -- Look I'm speaking in binary.",
+			"Bill Clicker is the only reason I come to teach anymore."
 	};
 
 	private String[] nameList = {
@@ -105,7 +116,8 @@ public class GameInterface extends JFrame{
 			"SweaveDaddy",
 			"WeaveDaddy",
 			"Weaver 'The Sans' Daddy",
-			"Uncle Sweaver"
+			"Uncle Sweaver",
+			"Uncle 'Sans'"
 	};
 
 	//Begin Class Instances Region
