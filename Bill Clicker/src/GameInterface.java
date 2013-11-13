@@ -107,7 +107,12 @@ public class GameInterface extends JFrame{
 			"British people just make my day.",
 			"Garrison has the most beautiful eyes.",
 			"100111000111010101110001111011 -- Look I'm speaking in binary.",
-			"Bill Clicker is the only reason I come to teach anymore."
+			"Bill Clicker is the only reason I come to teach anymore.",
+			"Thanks Obama!",
+			"Mitt Romney hates Sesame Street.",
+			"...",
+			"You just got #sweaved.",
+			"In a galaxy far, far away..."
 	};
 
 	private String[] nameList = {
