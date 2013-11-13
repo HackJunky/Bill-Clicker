@@ -291,6 +291,7 @@ public class Launcher extends JFrame{
 		panel.setLayout(gl_panel);
 		getContentPane().setLayout(groupLayout);
 		
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setVisible(true);
 		this.setSize(new Dimension(640, 404));
 	}
