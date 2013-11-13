@@ -24,12 +24,25 @@ import javax.swing.ListSelectionModel;
 
 
 public class Launcher extends JFrame{
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-
+	private static final long serialVersionUID = 4063192308692236637L;
+	private JTextField txtUsername;
+	private JTextField txtIP;
+	private JTextField txtPort;
+	private JRadioButton rdbtnHostANetworked;
+	private JRadioButton rdbtnConnectToExisting;
+	private JButton btnAuth;
+	private JLabel lblWaiting;
+	private JLabel lblServerAddress;
+	private JLabel lblPlayers;
+	private JLabel lblOpsTick;
+	private JButton btnKick;
+	private JButton btnBan;
+	private JList listPlayers;
+	private JLabel lblStatus;
+	private JButton btnStartGame;
+	
 	public static void main(String[] args) {
-		new GameInterface();
+		new Launcher();
 	}
 	
 	public Launcher() {
@@ -54,6 +67,8 @@ public class Launcher extends JFrame{
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
+		
+		btnStartGame = new JButton("Start Game");
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
@@ -65,15 +80,15 @@ public class Launcher extends JFrame{
 							.addGap(10)
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 								.addComponent(lblProgrammedByJad)
-								.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
 									.addGroup(groupLayout.createSequentialGroup()
 										.addComponent(lblDesignedByGalen)
 										.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 										.addComponent(lblsweaver))
-									.addGroup(Alignment.LEADING, groupLayout.createParallelGroup(Alignment.TRAILING)
+									.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 										.addComponent(lblInNoWay)
-										.addComponent(panel, GroupLayout.PREFERRED_SIZE, 586, GroupLayout.PREFERRED_SIZE))))
-							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+										.addComponent(panel, GroupLayout.PREFERRED_SIZE, 586, GroupLayout.PREFERRED_SIZE))
+									.addComponent(btnStartGame, Alignment.TRAILING)))))
 					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
@@ -82,7 +97,9 @@ public class Launcher extends JFrame{
 					.addContainerGap()
 					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(lblBillClicker)
+							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblBillClicker)
+								.addComponent(btnStartGame))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(lblProgrammedByJad)
 							.addPreferredGap(ComponentPlacement.RELATED)
@@ -106,11 +123,11 @@ public class Launcher extends JFrame{
 		JPanel ServerPanel = new JPanel();
 		ServerPanel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
 		
-		JRadioButton rdbtnHostANetworked = new JRadioButton("Host");
+		rdbtnHostANetworked = new JRadioButton("Host");
 		rdbtnHostANetworked.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		rdbtnHostANetworked.setSelected(true);
 		
-		JRadioButton rdbtnConnectToExisting = new JRadioButton("Connect");
+		rdbtnConnectToExisting = new JRadioButton("Connect");
 		rdbtnConnectToExisting.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		
 		JLabel lblPort = new JLabel("Port:");
@@ -119,28 +136,28 @@ public class Launcher extends JFrame{
 		JLabel lblServerIp = new JLabel("Server IP:");
 		lblServerIp.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		
-		textField = new JTextField();
-		textField.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
-		textField.setColumns(10);
+		txtUsername = new JTextField();
+		txtUsername.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
+		txtUsername.setColumns(10);
 		
-		textField_1 = new JTextField();
-		textField_1.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
-		textField_1.setColumns(10);
+		txtIP = new JTextField();
+		txtIP.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
+		txtIP.setColumns(10);
 		
-		textField_2 = new JTextField();
-		textField_2.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
-		textField_2.setColumns(10);
+		txtPort = new JTextField();
+		txtPort.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
+		txtPort.setColumns(10);
 		
-		JLabel lblStatus = new JLabel("Status:");
+		JLabel lblStatusIn = new JLabel("Status:");
+		lblStatusIn.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
+		
+		lblStatus = new JLabel("Waiting...");
 		lblStatus.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		
-		JLabel lblUnknown = new JLabel("Waiting...");
-		lblUnknown.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
+		btnAuth = new JButton("Authenticate");
+		btnAuth.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		
-		JButton btnNewButton = new JButton("Authenticate");
-		btnNewButton.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
-		
-		JLabel lblWaiting = new JLabel("Waiting...");
+		lblWaiting = new JLabel("Waiting...");
 		lblWaiting.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
@@ -149,9 +166,9 @@ public class Launcher extends JFrame{
 					.addContainerGap()
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel.createSequentialGroup()
-							.addComponent(lblStatus)
+							.addComponent(lblStatusIn)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lblUnknown))
+							.addComponent(lblStatus))
 						.addGroup(gl_panel.createSequentialGroup()
 							.addComponent(lblConfigureGameOptions, GroupLayout.PREFERRED_SIZE, 137, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
@@ -160,19 +177,19 @@ public class Launcher extends JFrame{
 							.addComponent(rdbtnConnectToExisting))
 						.addComponent(lblUsername)
 						.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
-							.addComponent(textField, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
+							.addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 								.addComponent(lblServerIp)
-								.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, 115, GroupLayout.PREFERRED_SIZE))
+								.addComponent(txtIP, GroupLayout.PREFERRED_SIZE, 115, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-								.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE)
+								.addComponent(txtPort, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE)
 								.addGroup(gl_panel.createSequentialGroup()
 									.addComponent(lblPort)
 									.addPreferredGap(ComponentPlacement.RELATED, 37, Short.MAX_VALUE)))
 							.addGap(4)
-							.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
+							.addComponent(btnAuth, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
 							.addGap(18)
 							.addComponent(lblWaiting)
 							.addGap(66))
@@ -189,10 +206,10 @@ public class Launcher extends JFrame{
 								.addComponent(lblPort))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(textField_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(textField_2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(txtIP, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(txtPort, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 								.addComponent(lblWaiting)
-								.addComponent(btnNewButton)))
+								.addComponent(btnAuth)))
 						.addGroup(gl_panel.createSequentialGroup()
 							.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 								.addComponent(lblConfigureGameOptions)
@@ -201,35 +218,35 @@ public class Launcher extends JFrame{
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(lblUsername)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addComponent(ServerPanel, GroupLayout.PREFERRED_SIZE, 123, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblStatus)
-						.addComponent(lblUnknown))
+						.addComponent(lblStatusIn)
+						.addComponent(lblStatus))
 					.addContainerGap(17, Short.MAX_VALUE))
 		);
 		
-		JLabel lblServerAddress = new JLabel("Server Address: ???");
+		lblServerAddress = new JLabel("Server Address: ???");
 		lblServerAddress.setFont(new Font("Comic Sans MS", Font.PLAIN, 11));
 		
-		JLabel lblPlayers = new JLabel("Players: ???");
+		lblPlayers = new JLabel("Players: ???");
 		lblPlayers.setFont(new Font("Comic Sans MS", Font.PLAIN, 11));
 		
-		JList list = new JList();
-		list.setFont(new Font("Comic Sans MS", Font.PLAIN, 11));
-		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		listPlayers = new JList();
+		listPlayers.setFont(new Font("Comic Sans MS", Font.PLAIN, 11));
+		listPlayers.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
-		JButton btnNewButton_1 = new JButton("Kick");
-		btnNewButton_1.setFont(new Font("Comic Sans MS", Font.PLAIN, 11));
+		btnKick = new JButton("Kick");
+		btnKick.setFont(new Font("Comic Sans MS", Font.PLAIN, 11));
 		
-		JButton btnBan = new JButton("Ban");
+		btnBan = new JButton("Ban");
 		btnBan.setFont(new Font("Comic Sans MS", Font.PLAIN, 11));
 		
 		JLabel lblOperationsTick = new JLabel("Operations / Tick:");
 		
-		JLabel label = new JLabel("??");
+		lblOpsTick = new JLabel("??");
 		GroupLayout gl_ServerPanel = new GroupLayout(ServerPanel);
 		gl_ServerPanel.setHorizontalGroup(
 			gl_ServerPanel.createParallelGroup(Alignment.LEADING)
@@ -239,16 +256,16 @@ public class Launcher extends JFrame{
 						.addComponent(lblPlayers)
 						.addGroup(gl_ServerPanel.createSequentialGroup()
 							.addGroup(gl_ServerPanel.createParallelGroup(Alignment.LEADING)
-								.addComponent(list, GroupLayout.PREFERRED_SIZE, 389, GroupLayout.PREFERRED_SIZE)
+								.addComponent(listPlayers, GroupLayout.PREFERRED_SIZE, 389, GroupLayout.PREFERRED_SIZE)
 								.addComponent(lblServerAddress))
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addGroup(gl_ServerPanel.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_ServerPanel.createSequentialGroup()
 									.addComponent(lblOperationsTick)
 									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(label))
+									.addComponent(lblOpsTick))
 								.addComponent(btnBan, GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
-								.addComponent(btnNewButton_1, GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE))
+								.addComponent(btnKick, GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE))
 							.addContainerGap())))
 		);
 		gl_ServerPanel.setVerticalGroup(
@@ -258,16 +275,16 @@ public class Launcher extends JFrame{
 					.addGroup(gl_ServerPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblServerAddress)
 						.addComponent(lblOperationsTick)
-						.addComponent(label))
+						.addComponent(lblOpsTick))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(lblPlayers)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_ServerPanel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_ServerPanel.createSequentialGroup()
-							.addComponent(btnNewButton_1)
+							.addComponent(btnKick)
 							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 							.addComponent(btnBan))
-						.addComponent(list, GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE))
+						.addComponent(listPlayers, GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		ServerPanel.setLayout(gl_ServerPanel);

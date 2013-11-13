@@ -16,6 +16,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
@@ -37,6 +43,9 @@ public class GameInterface extends JFrame{
 	private Rectangle billStatsArea;
 	private Rectangle billSupportArea;
 	private Rectangle billPurchaseArea;
+	private Rectangle billUpgradeArea;
+	private Rectangle drawArea;
+	private Rectangle[] billDrawArea;
 
 	//Begin Drawing Resources Region
 	private BufferedImage backgroundImage = CoreUtils.getBackgroundImage();
@@ -49,7 +58,7 @@ public class GameInterface extends JFrame{
 	private BufferedImage storeTile = CoreUtils.getStoreTile();
 
 	private ArrayList<FloatingText> floatingText = new ArrayList<FloatingText>();
-	
+
 	//Begin Store Definitions Region
 	private ArrayList<StoreTile> storeEntries;
 
@@ -89,7 +98,7 @@ public class GameInterface extends JFrame{
 			"My iPod is a variety of Taylor Swift and Based God.",
 			"What do you mean you didn't vote?!?"
 	};
-	
+
 	private String[] nameList = {
 			"Weaver",
 			"Sweaver",
@@ -98,7 +107,7 @@ public class GameInterface extends JFrame{
 			"Weaver 'The Sans' Daddy",
 			"Uncle Sweaver"
 	};
- 
+
 	//Begin Class Instances Region
 	private WorldTimer gameHandle;
 	private Timer gameTimer;
@@ -126,10 +135,20 @@ public class GameInterface extends JFrame{
 		billSupportArea = new Rectangle(billStatsArea.x, billStatsArea.y + billStatsArea.height, billStatsArea.width, WINDOW_SIZE_Y - (WINDOW_SIZE_Y / 8));
 		billPurchaseArea = new Rectangle(billStatsArea.x + billStatsArea.width, 0, WINDOW_SIZE_X / 4, WINDOW_SIZE_Y);
 
+		//Begin Store Draw Definitions Region
+		int stores = storeEntries.size();
+		drawArea = new Rectangle(billStatsArea.x, billStatsArea.y + billStatsArea.height, billStatsArea.width, WINDOW_SIZE_Y - (billStatsArea.y + billStatsArea.height));
+		int sizeX = drawArea.width;
+		int sizeY = drawArea.height / stores;
+		billDrawArea = new Rectangle[stores];
+		for (int i = 0; i < stores; i++) {
+			billDrawArea[i] = new Rectangle(drawArea.x, drawArea.y + (sizeY * i) + 16, drawArea.width, sizeY);
+		}
+
 		//Begin Class Instantiation Region
 		gameHandle = new WorldTimer();
 		gameTimer = new Timer(1, gameHandle);
-		networkHandle = new NetworkManager();
+		//networkHandle = new NetworkManager();
 
 		//Begin Main INIT Region
 		this.setUndecorated(true);
@@ -196,7 +215,7 @@ public class GameInterface extends JFrame{
 		//Draw Bill Region
 		g2d.drawImage(billImage, billClickerButton.x - billClickerButtonMOD, billClickerButton.y - billClickerButtonMOD, billClickerButton.width + (billClickerButtonMOD * 2), billClickerButton.height + (billClickerButtonMOD * 2), this);
 		g2d.drawImage(textGradient, 0, billClickerButton.y + (billClickerButton.height / 8), billClickerArea.width, 64, this);
-		
+
 		g2d.setColor(Color.WHITE);
 		g2d.setFont(new Font("Comic Sans MS", Font.BOLD, 36));
 		for (FloatingText f : floatingText) {
@@ -227,7 +246,16 @@ public class GameInterface extends JFrame{
 		g2d.setFont(new Font("Comic Sans MS", Font.PLAIN, 18));
 		fm = g2d.getFontMetrics();
 		String message = "'" + status + "' -" + name + "2013";
-		g2d.drawString(message, billStatsArea.x + (billStatsArea.width / 2) - (fm.stringWidth(message) / 2), fm.getAscent() + 5);
+		g2d.drawString(message, billStatsArea.x + (billStatsArea.width / 2) - (fm.stringWidth(message) / 2), fm.getAscent() + 15);
+
+		//Begin Central Region
+		g2d.setColor(Color.DARK_GRAY);
+		g2d.fillRect(drawArea.x, drawArea.y, drawArea.width, drawArea.height);
+		g2d.setColor(Color.WHITE);
+		for (int i = 0; i < billDrawArea.length; i++) {
+			Rectangle r = billDrawArea[i];
+			g2d.drawImage(textGradient, r.x, r.y, r.width, 8, this);
+		}
 
 		//Begin Shop Region
 		numHor = billPurchaseArea.width / GRAD_SIZE_X;
@@ -300,7 +328,7 @@ public class GameInterface extends JFrame{
 		public boolean leftClick;
 		private int time;
 		private int statusTicks = 0;
-		
+
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			//Begin Networking Region
@@ -314,14 +342,14 @@ public class GameInterface extends JFrame{
 				statusTicks++;
 				time = Calendar.getInstance().get(Calendar.SECOND);
 			}
-			
+
 			//Begin Time Taking Region
 			if (statusTicks == 6) {
 				status = statusList[new Random().nextInt(statusList.length)];
 				name = nameList[new Random().nextInt(nameList.length)];
 				statusTicks = 0;
 			}
-			
+
 			if (cursorCoords != null) {
 				if (billClickerButton.contains(cursorCoords) && billClickerButtonMOD == 5) {
 					if (leftClick) {
@@ -357,7 +385,7 @@ public class GameInterface extends JFrame{
 					appealPerClick = 1;
 				}
 			}
-			
+
 			for (int i = 0; i < floatingText.size(); i++) {
 				FloatingText f = floatingText.get(i);
 				if (f.isDone()) {
@@ -366,30 +394,30 @@ public class GameInterface extends JFrame{
 					f.flutter();
 				}
 			}
-			
+
 			//Begin Appeal Population Region
 			appealPerSecond = 0;
 			for (StoreTile s : storeEntries) {
 				appealPerSecond += (s.getAppeal() * s.getOwned());
 			}
-			
+
 			cursorCoords = GameInterface.this.getMousePosition();	
 			leftClick = false;
 		}
 
 		@Override
 		public void mouseClicked(MouseEvent arg0) {
-			
+
 		}
 
 		@Override
 		public void mouseEntered(MouseEvent arg0) {
-			
+
 		}
 
 		@Override
 		public void mouseExited(MouseEvent arg0) {
-			
+
 		}
 
 		@Override
@@ -401,22 +429,135 @@ public class GameInterface extends JFrame{
 
 		@Override
 		public void mouseReleased(MouseEvent arg0) {
-			
+
 		}
 	}
 
 	public class NetworkManager implements Runnable {
-		private boolean connected;
-		private String IP;
+		private boolean isServer;
+		private String ip;
 		private int port;
+		private String password;
+		private int id;
+		private String username;
 
-		public NetworkManager() {
-			
+		private ServerSocket serverSocket;
+		private Socket socket;
+		private ObjectInputStream in;
+		private ObjectOutputStream out;
+
+		private boolean terminated = false;
+		private boolean connected = false;
+		private int overhead = 0;
+
+		public NetworkManager(boolean isServer, String ip, int port, String password, String username) {
+			this.isServer = isServer;
+			this.ip = ip;
+			this.port = port;
+			this.password = password;
+			this.username = username;
+			this.id = username.hashCode();
 		}
+
 
 		@Override
 		public void run() {
-			
+			if (isServer) {
+				if (!terminated) {
+					try {
+						try {
+							serverSocket = new ServerSocket();
+							serverSocket.bind(new InetSocketAddress(ip, port));
+						} catch (IOException ex) {
+							return;
+						}
+						socket = null;
+						try {
+							socket = serverSocket.accept();
+						} catch (IOException ex) {
+							return;
+						}
+						while (!terminated) {
+							connected = socket.isConnected();
+							if (out == null) {
+								out = new ObjectOutputStream(socket.getOutputStream());
+							}
+							if (in == null) {
+								in = new ObjectInputStream(socket.getInputStream());
+							}
+							//Read changes first
+//							input = (ArrayList<Block>)in.readObject();
+//							decode();
+//
+//							//Write changes back
+//							encode();
+//							out.writeObject(output);
+						}
+					}catch (Exception ex) {
+						if (!terminated) {
+							ex.printStackTrace();
+							terminated = true;
+						}
+						try {
+							out.flush();
+						}catch (Exception e) {
+							terminated = true;
+						}
+					}
+				}
+			}else {
+				if (!terminated) {
+					try {
+						while (!terminated) {
+							connected = socket.isConnected();
+							if (out == null) {
+								out = new ObjectOutputStream(socket.getOutputStream());
+							}
+							if (in == null) {
+								in = new ObjectInputStream(socket.getInputStream());
+							}
+//							//Write changes first
+//							encode();
+//							out.writeObject(output);
+//
+//							//Read changes back
+//							worldCycle = (int)in.readObject();
+//							decode();
+						}
+					}catch (Exception ex) {
+						if (!terminated) {
+							ex.printStackTrace();
+							terminated = true;
+						}
+						try {
+							out.flush();
+						}catch (Exception e) {
+							terminated = true;
+						}
+					}
+				}
+			}
+		}
+
+		public void encode() {
+			try {
+
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		public void decode() {
+			try {
+
+			}catch (Exception e) {
+				e.printStackTrace();
+
+			}
+		}
+
+		public boolean isConnected() {
+			return connected;
 		}
 	}
 }
