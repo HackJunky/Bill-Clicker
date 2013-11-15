@@ -85,7 +85,13 @@ public class Launcher extends JFrame{
 		btnStartGame.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-
+				if (srvModule != null) {
+					new GameInterface(srvModule);
+				}else if (netModule != null) {
+					new GameInterface(netModule);
+				}else {
+					JOptionPane.showMessageDialog(Launcher.this, "You must host or connect a server, as this game requires 2+ players.", "Networking Required.", JOptionPane.OK_OPTION);
+				}
 			}
 		});
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
