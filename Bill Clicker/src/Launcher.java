@@ -24,6 +24,7 @@ import javax.swing.JRadioButton;
 import javax.swing.border.MatteBorder;
 import javax.swing.JList;
 import javax.swing.ListSelectionModel;
+import javax.swing.JCheckBox;
 
 
 public class Launcher extends JFrame{
@@ -31,18 +32,15 @@ public class Launcher extends JFrame{
 	private JTextField txtUsername;
 	private JTextField txtIP;
 	private JTextField txtPort;
-	private JRadioButton rdbtnHostANetworked;
-	private JRadioButton rdbtnConnectToExisting;
 	private JButton btnAuth;
-	private JLabel lblWaiting;
 	private JLabel lblServerAddress;
 	private JLabel lblPlayers;
 	private JLabel lblOpsTick;
 	private JButton btnKick;
 	private JButton btnBan;
 	private JList listPlayers;
-	private JLabel lblStatus;
 	private JButton btnStartGame;
+	private JCheckBox chckbxServer;
 	
 	public static void main(String[] args) {
 		new Launcher();
@@ -89,15 +87,16 @@ public class Launcher extends JFrame{
 							.addGap(10)
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 								.addComponent(lblProgrammedByJad)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-									.addGroup(groupLayout.createSequentialGroup()
-										.addComponent(lblDesignedByGalen)
-										.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(lblsweaver))
-									.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-										.addComponent(lblInNoWay)
-										.addComponent(panel, GroupLayout.PREFERRED_SIZE, 586, GroupLayout.PREFERRED_SIZE))
-									.addComponent(btnStartGame, Alignment.TRAILING)))))
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addComponent(lblDesignedByGalen)
+									.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+										.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+											.addComponent(lblInNoWay)
+											.addComponent(panel, GroupLayout.PREFERRED_SIZE, 476, GroupLayout.PREFERRED_SIZE)
+											.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+												.addComponent(btnStartGame)
+												.addComponent(lblsweaver)))
+										.addGap(110))))))
 					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
@@ -113,11 +112,11 @@ public class Launcher extends JFrame{
 							.addComponent(lblProgrammedByJad)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(lblDesignedByGalen)
-							.addGap(18))
+							.addGap(24))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addComponent(lblsweaver)
 							.addPreferredGap(ComponentPlacement.RELATED)))
-					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 246, GroupLayout.PREFERRED_SIZE)
+					.addComponent(panel, GroupLayout.PREFERRED_SIZE, 223, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(lblInNoWay)
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -126,18 +125,11 @@ public class Launcher extends JFrame{
 		JLabel lblConfigureGameOptions = new JLabel("Configure Game Options");
 		lblConfigureGameOptions.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		
-		JLabel lblUsername = new JLabel("Username");
+		JLabel lblUsername = new JLabel("Username:");
 		lblUsername.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		
 		JPanel ServerPanel = new JPanel();
 		ServerPanel.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
-		
-		rdbtnHostANetworked = new JRadioButton("Host");
-		rdbtnHostANetworked.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
-		rdbtnHostANetworked.setSelected(true);
-		
-		rdbtnConnectToExisting = new JRadioButton("Connect");
-		rdbtnConnectToExisting.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		
 		JLabel lblPort = new JLabel("Port:");
 		lblPort.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
@@ -157,17 +149,10 @@ public class Launcher extends JFrame{
 		txtPort.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		txtPort.setColumns(10);
 		
-		JLabel lblStatusIn = new JLabel("Status:");
-		lblStatusIn.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
-		
-		lblStatus = new JLabel("Waiting...");
-		lblStatus.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
-		
 		btnAuth = new JButton("Authenticate");
 		btnAuth.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
 		
-		lblWaiting = new JLabel("Waiting...");
-		lblWaiting.setFont(new Font("Comic Sans MS", Font.PLAIN, 12));
+		chckbxServer = new JCheckBox("Server");
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
@@ -175,66 +160,47 @@ public class Launcher extends JFrame{
 					.addContainerGap()
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel.createSequentialGroup()
-							.addComponent(lblStatusIn)
+							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+								.addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblUsername, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE))
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lblStatus))
-						.addGroup(gl_panel.createSequentialGroup()
-							.addComponent(lblConfigureGameOptions, GroupLayout.PREFERRED_SIZE, 137, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(rdbtnHostANetworked)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(rdbtnConnectToExisting))
-						.addComponent(lblUsername)
-						.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
-							.addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 								.addComponent(lblServerIp)
 								.addComponent(txtIP, GroupLayout.PREFERRED_SIZE, 115, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-								.addComponent(txtPort, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE)
+							.addGap(6)
+							.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_panel.createSequentialGroup()
+									.addComponent(txtPort, GroupLayout.PREFERRED_SIZE, 61, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED))
 								.addGroup(gl_panel.createSequentialGroup()
 									.addComponent(lblPort)
-									.addPreferredGap(ComponentPlacement.RELATED, 37, Short.MAX_VALUE)))
-							.addGap(4)
-							.addComponent(btnAuth, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(lblWaiting)
-							.addGap(66))
-						.addComponent(ServerPanel, GroupLayout.PREFERRED_SIZE, 563, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap())
+									.addGap(43)))
+							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+								.addComponent(btnAuth, GroupLayout.PREFERRED_SIZE, 117, GroupLayout.PREFERRED_SIZE)
+								.addComponent(chckbxServer)))
+						.addComponent(lblConfigureGameOptions, GroupLayout.PREFERRED_SIZE, 137, GroupLayout.PREFERRED_SIZE)
+						.addComponent(ServerPanel, GroupLayout.PREFERRED_SIZE, 454, GroupLayout.PREFERRED_SIZE))
+					.addGap(242))
 		);
 		gl_panel.setVerticalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
-					.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
-						.addGroup(gl_panel.createSequentialGroup()
-							.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblServerIp)
-								.addComponent(lblPort))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(txtIP, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(txtPort, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblWaiting)
-								.addComponent(btnAuth)))
-						.addGroup(gl_panel.createSequentialGroup()
-							.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblConfigureGameOptions)
-								.addComponent(rdbtnHostANetworked)
-								.addComponent(rdbtnConnectToExisting))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(lblUsername)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(ServerPanel, GroupLayout.PREFERRED_SIZE, 123, GroupLayout.PREFERRED_SIZE)
+					.addComponent(lblConfigureGameOptions)
+					.addGap(2)
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblPort)
+						.addComponent(lblUsername)
+						.addComponent(lblServerIp)
+						.addComponent(chckbxServer))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblStatusIn)
-						.addComponent(lblStatus))
-					.addContainerGap(17, Short.MAX_VALUE))
+						.addComponent(txtUsername, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(txtIP, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(txtPort, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnAuth))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(ServerPanel, GroupLayout.PREFERRED_SIZE, 123, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(24, Short.MAX_VALUE))
 		);
 		
 		lblServerAddress = new JLabel("Server Address: ???");
@@ -264,18 +230,18 @@ public class Launcher extends JFrame{
 					.addGroup(gl_ServerPanel.createParallelGroup(Alignment.LEADING)
 						.addComponent(lblPlayers)
 						.addGroup(gl_ServerPanel.createSequentialGroup()
-							.addGroup(gl_ServerPanel.createParallelGroup(Alignment.LEADING)
-								.addComponent(listPlayers, GroupLayout.PREFERRED_SIZE, 389, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblServerAddress))
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(gl_ServerPanel.createParallelGroup(Alignment.LEADING)
+							.addGroup(gl_ServerPanel.createParallelGroup(Alignment.LEADING, false)
 								.addGroup(gl_ServerPanel.createSequentialGroup()
-									.addComponent(lblOperationsTick)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(lblOpsTick))
-								.addComponent(btnBan, GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
-								.addComponent(btnKick, GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE))
-							.addContainerGap())))
+									.addComponent(lblServerAddress)
+									.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(lblOperationsTick))
+								.addComponent(listPlayers, GroupLayout.PREFERRED_SIZE, 304, GroupLayout.PREFERRED_SIZE))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGroup(gl_ServerPanel.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(lblOpsTick)
+								.addComponent(btnKick, GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
+								.addComponent(btnBan, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+					.addContainerGap(21, Short.MAX_VALUE))
 		);
 		gl_ServerPanel.setVerticalGroup(
 			gl_ServerPanel.createParallelGroup(Alignment.LEADING)
@@ -288,12 +254,12 @@ public class Launcher extends JFrame{
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(lblPlayers)
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_ServerPanel.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_ServerPanel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(listPlayers, GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
 						.addGroup(gl_ServerPanel.createSequentialGroup()
 							.addComponent(btnKick)
 							.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(btnBan))
-						.addComponent(listPlayers, GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE))
+							.addComponent(btnBan)))
 					.addContainerGap())
 		);
 		ServerPanel.setLayout(gl_ServerPanel);
@@ -301,7 +267,7 @@ public class Launcher extends JFrame{
 		getContentPane().setLayout(groupLayout);
 		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setSize(new Dimension(532, 392));
 		this.setVisible(true);
-		this.setSize(new Dimension(640, 404));
 	}
 }

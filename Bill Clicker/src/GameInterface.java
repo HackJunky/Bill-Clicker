@@ -306,7 +306,7 @@ public class GameInterface extends JFrame{
 
 			Rectangle tileLoc = new Rectangle(billPurchaseArea.x + 48, billPurchaseArea.y + (billPurchaseArea.height / 8) + (cTile * storeTile.getHeight()) + fm.getHeight() + 15, 30, 16);
 			if (storeEntries.get(cTile).isMouseOver()) {
-				g2d.drawImage(billImage, tileLoc.x - 4, tileLoc.y - 4, tileLoc.width + 8, tileLoc.height + 8, this);
+				g2d.drawImage(billImage, tileLoc.x - 4, tileLoc.y - 4, tileLoc.width, tileLoc.height, this);
 				g2d.drawString(String.valueOf(storeEntries.get(cTile).getCost()), billPurchaseArea.x + 76, billPurchaseArea.y + (billPurchaseArea.height / 8) + (cTile * storeTile.getHeight()) + fm.getAscent() + fm.getHeight() + 6);
 			}else {
 				g2d.drawImage(billImage, tileLoc.x, tileLoc.y, tileLoc.width, tileLoc.height, this);
