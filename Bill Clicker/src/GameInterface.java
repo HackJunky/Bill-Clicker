@@ -1,11 +1,11 @@
+import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Cursor;
+import java.awt.Composite;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Stroke;
@@ -16,17 +16,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
 public class GameInterface extends JFrame{
@@ -56,6 +51,7 @@ public class GameInterface extends JFrame{
 	private BufferedImage vertSep = CoreUtils.getVertSep();
 	private BufferedImage textGradient = CoreUtils.getTextGradient();
 	private BufferedImage storeTile = CoreUtils.getStoreTile();
+	private BufferedImage centralImage = CoreUtils.getCentralImage();
 
 	private ArrayList<FloatingText> floatingText = new ArrayList<FloatingText>();
 
@@ -65,7 +61,11 @@ public class GameInterface extends JFrame{
 	//Begin Bill Definitions Region
 	private int appealPerSecond = 0;
 	private int appealPerClick = 1;
-	private int totalAppeal = 1000;
+	private int totalAppeal = 2500;
+	private String billStatus = "We are waiting...";
+	private String billProgress = "Waiting...";
+	
+	private boolean restart = false;
 
 	//Begin UI Strings Region
 	private String status = "You feel like passing a bill, but no one wants to hear about your bill.";
@@ -120,27 +120,49 @@ public class GameInterface extends JFrame{
 			"Uncle 'Sans'"
 	};
 
+	private String[] progressList = {
+			"Your bill has been introduced to the House or Senate.",
+			"Your bill has been given a hearing.",
+			"Your bill was passed and sent to the Senate.",
+			"The Rules Committee has placed the bill on the calendar.",
+			"The bill has been debated and accepted by both houses.",
+			"Your bill has been signed by the President."
+	};
+
+	private String[] failureList = {
+			"Your bill was not introduced to the House or Senate.",
+			"Your bill was not given a hearing.",
+			"Your bill was not passed and sent to the Senate.",
+			"The Rules Committee did not placed the bill on the calendar.",
+			"The bill has been debated and denied by both houses.",
+			"Your bill has been vetoed by the President."
+	};
+
+	private int[] timeList = {
+			30, 60, 90, 120, 150, 180
+	};
+
 	//Begin Class Instances Region
 	private WorldTimer gameHandle;
 	private Timer gameTimer;
-	
+
 	//Begin Network Variable Region
 	NetworkModule netModule;
 	ServerModule srvModule;
-	
-	
+
+
 	//If a netModule variable exists, we are in CLIENT mode.
 	//If a srvModule variable exists, we are in SERVER mode.
 	public GameInterface(NetworkModule m) {
 		netModule = m;
 		INIT();
 	}
-	
+
 	public GameInterface(ServerModule m) {
 		srvModule = m;
 		INIT();
 	}
-	
+
 	public void INIT() {
 		//Begin Store Entries Region
 		storeEntries = new ArrayList<StoreTile>();
@@ -275,15 +297,23 @@ public class GameInterface extends JFrame{
 		fm = g2d.getFontMetrics();
 		String message = "'" + status + "' -" + name + "2013";
 		g2d.drawString(message, billStatsArea.x + (billStatsArea.width / 2) - (fm.stringWidth(message) / 2), fm.getAscent() + 15);
+		
+		g2d.drawString("Bill Progress: " + billProgress, billStatsArea.x + 5, billStatsArea.height - (fm.getHeight() * 2));
+		g2d.drawString("Bill Status: " + billStatus, billStatsArea.x + 5, billStatsArea.height - fm.getHeight());
 
 		//Begin Central Region
-		g2d.setColor(Color.DARK_GRAY);
-		g2d.fillRect(drawArea.x, drawArea.y, drawArea.width, drawArea.height);
-		g2d.setColor(Color.WHITE);
-		for (int i = 0; i < billDrawArea.length; i++) {
-			Rectangle r = billDrawArea[i];
-			g2d.drawImage(textGradient, r.x, r.y, r.width, 8, this);
-		}
+//		g2d.setColor(Color.DARK_GRAY);
+//		g2d.fillRect(drawArea.x, drawArea.y, drawArea.width, drawArea.height);
+//		g2d.setColor(Color.WHITE);
+//		for (int i = 0; i < billDrawArea.length; i++) {
+//			Rectangle r = billDrawArea[i];
+//			g2d.drawImage(textGradient, r.x, r.y, r.width, 8, this);
+//		}
+		float composite = (float) (1.0f - (timeToPlay / 180));
+		Composite original = g2d.getComposite();
+		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, composite));
+		g2d.drawImage(centralImage, drawArea.x, drawArea.y, drawArea.height, drawArea.width, this);
+		g2d.setComposite(original);
 
 		//Begin Shop Region
 		numHor = billPurchaseArea.width / GRAD_SIZE_X;
@@ -350,19 +380,22 @@ public class GameInterface extends JFrame{
 		g2d.drawImage(horSep, billSupportArea.x, billSupportArea.y, billSupportArea.width, 16, this);
 		g2d.drawImage(vertSep, billPurchaseArea.x, billPurchaseArea.y, 16, billPurchaseArea.height, this);
 
-//Begin Timer Display Region *** Best Timer Display Ever ***
+		//Begin Timer Display Region
 		g2d.setColor(Color.BLACK);
-		g2d.fillArc(20, 500, 70, 70, 90, 360);
+		g2d.fillArc(billClickerArea.x + 30, billClickerArea.y + billClickerArea.height - 100, 70, 70, 90, 360);
 		g2d.setColor(Color.RED);
-		g2d.fillArc(20, 500, 70, 70, 90, (int)(timePercent*-360));
-		g2d.drawString("Time Remaining: "+ (timeToPlay-currentTime)+" s", 20, 600);
+		g2d.fillArc(billClickerArea.x + 30, billClickerArea.y + billClickerArea.height - 100, 70, 70, 90, (int)(timePercent*-360));
+		g2d.drawString("Time Remaining: "+ (timeToPlay-currentTime)+" s", billClickerArea.x + 30, billClickerArea.y + billClickerArea.height - 100);
 
-		
 		//Begin Graphics FINALIZE Region
 		Toolkit.getDefaultToolkit().sync();
 		bs.show();
 	}
 	
+	public boolean isRestartReady() {
+		return restart;
+	}
+
 	//Nasty Work That Richard Did
 	public double timeToPlay = 180;
 	public double currentTime = 0;
@@ -373,6 +406,7 @@ public class GameInterface extends JFrame{
 		public boolean leftClick;
 		private int time;
 		private int statusTicks = 0;
+		private int stage = 0;
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
@@ -382,15 +416,121 @@ public class GameInterface extends JFrame{
 			draw();
 
 			//Begin Game Time Regions
+			boolean tick = false;
 			if (Calendar.getInstance().get(Calendar.SECOND) > time) {
+				tick = true;
+			}
+			
+			if (tick) {
 				totalAppeal += appealPerSecond;
 				statusTicks++;
 				time = Calendar.getInstance().get(Calendar.SECOND);
 				currentTime++;
-				System.out.println(currentTime);
-				System.out.println(timeToPlay);
-				System.out.println(currentTime/timeToPlay);
 				timePercent = currentTime/timeToPlay;
+			}
+			time = Calendar.getInstance().get(Calendar.SECOND);
+
+			//Begin Game Logic Region
+			boolean fail = false;
+			Random r = new Random();
+			int ret = r.nextInt(100);
+			if (currentTime == timeList[0] && stage == 0) {
+				for (int i = 0; i < storeEntries.get(0).getOwned(); i++) {
+					ret += r.nextInt(3);
+				}
+				for (int i = 0; i < storeEntries.get(1).getOwned(); i++) {
+					ret += r.nextInt(5);
+				}
+				if (ret > 50) {
+					billStatus = progressList[0];
+				}else {
+					billStatus = failureList[0];
+					fail = true;
+				}
+				stage++;
+			}else if (currentTime == timeList[1] && stage == 1) {
+				for (int i = 0; i < storeEntries.get(2).getOwned(); i++) {
+					ret += r.nextInt(5);
+				}
+				for (int i = 0; i < storeEntries.get(3).getOwned(); i++) {
+					ret += r.nextInt(5);
+				}
+				if (ret > 50) {
+					billStatus = progressList[1];
+				}else {
+					billStatus = failureList[1];
+					fail = true;
+				}
+				stage++;
+			}else if (currentTime == timeList[2] && stage == 2) {
+				for (int i = 0; i < storeEntries.get(3).getOwned(); i++) {
+					ret += r.nextInt(5);
+				}
+				for (int i = 0; i < storeEntries.get(4).getOwned(); i++) {
+					ret += r.nextInt(5);
+				}
+				if (ret > 50) {
+					billStatus = progressList[2];
+				}else {
+					billStatus = failureList[2];
+					fail = true;
+				}
+				stage++;
+			}else if (currentTime == timeList[3] && stage == 3) {
+				for (int i = 0; i < storeEntries.get(6).getOwned(); i++) {
+					ret += r.nextInt(5);
+				}
+				for (int i = 0; i < storeEntries.get(7).getOwned(); i++) {
+					ret += r.nextInt(5);
+				}
+				if (ret > 50) {
+					billStatus = progressList[4];
+				}else {
+					billStatus = failureList[4];
+					fail = true;
+				}
+				stage++;
+			}else if (currentTime == timeList[4] && stage == 4) {
+				for (int i = 0; i < storeEntries.get(8).getOwned(); i++) {
+					ret += r.nextInt(5);
+				}
+				if (ret > 50) {
+					billStatus = progressList[5];
+				}else {
+					billStatus = failureList[5];
+					fail = true;
+				}
+				stage++;
+			}else if (currentTime == timeList[5] && stage == 5) {
+				for (int i = 0; i < storeEntries.get(9).getOwned(); i++) {
+					ret += r.nextInt(5);
+				}
+				if (ret > 50) {
+					billStatus = progressList[6];
+				}else {
+					billStatus = failureList[6];
+					fail = true;
+				}
+				stage++;
+			}else {
+				if (currentTime < timeList[0]) {
+					billProgress = "Introduced";
+				}else if (currentTime < timeList[1]) {
+					billProgress = "Hearing";
+				}else if (currentTime < timeList[2]) {
+					billProgress = "Senate";
+				}else if (currentTime < timeList[3]) {
+					billProgress = "Rules Committee";
+				}else if (currentTime < timeList[4]) {
+					billProgress = "House Debate";
+				}else if (currentTime < timeList[5]) {
+					billProgress = "President";
+				}
+			}
+			
+			if (fail) {
+				JOptionPane.showMessageDialog(GameInterface.this, "Your bill failed to make it to adulthood!", "Beezow Zap Bippity Bop", JOptionPane.OK_OPTION);
+				restart = true;
 			}
 
 			//Begin Time Taking Region

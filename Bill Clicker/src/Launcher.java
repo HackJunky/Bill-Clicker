@@ -53,6 +53,7 @@ public class Launcher extends JFrame{
 	private ServerModule srvModule;
 	private Thread clientThread;
 	private NetworkModule netModule;
+	private GameInterface game;
 
 	public static void main(String[] args) {
 		new Launcher();
@@ -86,9 +87,9 @@ public class Launcher extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (srvModule != null) {
-					new GameInterface(srvModule);
+					game = new GameInterface(srvModule);
 				}else if (netModule != null) {
-					new GameInterface(netModule);
+					game = new GameInterface(netModule);
 				}else {
 					JOptionPane.showMessageDialog(Launcher.this, "You must host or connect a server, as this game requires 2+ players.", "Networking Required.", JOptionPane.OK_OPTION);
 				}
@@ -384,6 +385,13 @@ public class Launcher extends JFrame{
 
 				}else {
 
+				}
+				if (game != null) {
+					if (game.isRestartReady()) {
+						game.setVisible(false);
+						game.dispose();
+						game = null;
+					}
 				}
 			}catch (Exception e) {
 				e.printStackTrace();

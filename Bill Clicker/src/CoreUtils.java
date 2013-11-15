@@ -79,4 +79,13 @@ public class CoreUtils{
 		}
 		return null;
 	}
+	
+	public static BufferedImage getCentralImage() {
+		try {
+			return ImageIO.read(new File("res/img/mainimg.jpg"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 }
