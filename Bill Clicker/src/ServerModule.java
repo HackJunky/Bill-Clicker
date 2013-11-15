@@ -35,10 +35,10 @@ public class ServerModule {
 		}
 		playerNames = new ArrayList<String>();
 		playerNames.add(serverSockets[0].getLocalName());
-		for (int i = 1; i <= players; i++) {
+		for (int i = 0; i < players; i++) {
 			playerNames.add(serverSockets[i].getRemoteName());
 		}
-		for (int i = 0; i <= players; i++) {
+		for (int i = 0; i < players; i++) {
 			NetworkModule m = serverSockets[i];
 			m.setRemotePlayers(playerNames);
 		}
@@ -62,8 +62,8 @@ public class ServerModule {
 	public String[] getPlayers() {
 		String[] s = new String[players + 1];
 		s[0] = serverSockets[0].getLocalName();
-		for (int i = 1; i <= players; i++) {
-			s[i] = serverSockets[i].getRemoteName();
+		for (int i = 0; i < players; i++) {
+			s[i + 1] = serverSockets[i].getRemoteName();
 		}
 		return s;
 	}

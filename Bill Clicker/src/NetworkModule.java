@@ -65,7 +65,7 @@ public class NetworkModule implements Runnable {
 							in = new ObjectInputStream(socket.getInputStream());
 						}
 						//Read changes first
-						remoteName = (String)in.readObject();
+						remoteName = in.readUTF();
 						input = (ArrayList<Object>)in.readObject();
 
 						//Write changes back
@@ -107,7 +107,7 @@ public class NetworkModule implements Runnable {
 							in = new ObjectInputStream(socket.getInputStream());
 						}
 						//Write changes first
-						out.writeObject(username);
+						out.writeUTF(username);
 						out.writeObject(output);
 
 						//Read changes back

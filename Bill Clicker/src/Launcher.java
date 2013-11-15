@@ -352,7 +352,11 @@ public class Launcher extends JFrame{
 			try {
 				if (srvModule != null) {
 					for (int i = 0; i < srvModule.getPlayers().length; i++) {
-						info.add(i, srvModule.getPlayers()[i]);
+						if (i == 0) {
+							info.add(i, srvModule.getPlayers()[i] + " [HOST]");
+						}else {
+							info.add(i, srvModule.getPlayers()[i] + " [CLIENT]");
+						}
 					}
 					lblServerAddress.setText("Server Address: " + srvModule.getIP());
 					lblPlayers.setText("Players: " + srvModule.getPlayers().length);
@@ -363,7 +367,11 @@ public class Launcher extends JFrame{
 				}else if (netModule != null) {
 					try {
 						for (int i = 0; i < netModule.getRemotePlayers().toArray().length; i++) {
-							info.add(i, netModule.getRemotePlayers().toArray()[i]);
+							if (i == 0) {
+								info.add(i, netModule.getRemotePlayers().toArray()[i] + " [HOST]");
+							}else {
+								info.add(i, netModule.getRemotePlayers().toArray()[i] + " [CLIENT]");
+							}
 						}
 						lblPlayers.setText("Players: " + netModule.getRemotePlayers().toArray().length);
 					}catch (Exception e) {
