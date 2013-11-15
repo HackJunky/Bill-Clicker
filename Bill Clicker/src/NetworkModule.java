@@ -12,7 +12,8 @@ public class NetworkModule implements Runnable {
 	private String ip;
 	private int port;
 	private String username;
-
+	private String remoteName;
+	
 	private ServerSocket serverSocket;
 	private Socket socket;
 	private ObjectInputStream in;
@@ -22,6 +23,8 @@ public class NetworkModule implements Runnable {
 	private boolean connected = false;
 	private int overhead = 0;
 
+	private ArrayList<String> remotePlayers = new ArrayList<String>();
+	
 	private ArrayList<Object> input = new ArrayList<Object>();
 	private ArrayList<Object> output = new ArrayList<Object>();
 	
@@ -62,10 +65,12 @@ public class NetworkModule implements Runnable {
 							in = new ObjectInputStream(socket.getInputStream());
 						}
 						//Read changes first
+						remoteName = (String)in.readObject();
 						input = (ArrayList<Object>)in.readObject();
 
 						//Write changes back
 						out.writeObject(output);
+						out.writeObject(remotePlayers);
 					}
 				}catch (Exception ex) {
 					if (!terminated) {
@@ -102,10 +107,12 @@ public class NetworkModule implements Runnable {
 							in = new ObjectInputStream(socket.getInputStream());
 						}
 						//Write changes first
+						out.writeObject(username);
 						out.writeObject(output);
 
 						//Read changes back
 						input = (ArrayList<Object>)in.readObject();
+						remotePlayers = (ArrayList<String>)in.readObject();
 					}
 				}catch (Exception ex) {
 					if (!terminated) {
@@ -124,6 +131,22 @@ public class NetworkModule implements Runnable {
 				}
 			}
 		}
+	}
+	
+	public String getLocalName() {
+		return username;
+	}
+	
+	public String getRemoteName() {
+		return remoteName;
+	}
+	
+	public ArrayList<String> getRemotePlayers() {
+		return remotePlayers;
+	}
+	
+	public void setRemotePlayers(ArrayList<String> s) {
+		remotePlayers = s;
 	}
 	
 	public ArrayList<Object> getInStream() {
@@ -145,5 +168,9 @@ public class NetworkModule implements Runnable {
 
 	public boolean isConnected() {
 		return connected;
+	}
+	
+	public String getIP() {
+		return ip;
 	}
 }

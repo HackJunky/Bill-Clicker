@@ -123,8 +123,25 @@ public class GameInterface extends JFrame{
 	//Begin Class Instances Region
 	private WorldTimer gameHandle;
 	private Timer gameTimer;
-
-	public GameInterface() {
+	
+	//Begin Network Variable Region
+	NetworkModule netModule;
+	ServerModule srvModule;
+	
+	
+	//If a netModule variable exists, we are in CLIENT mode.
+	//If a srvModule variable exists, we are in SERVER mode.
+	public GameInterface(NetworkModule m) {
+		netModule = m;
+		INIT();
+	}
+	
+	public GameInterface(ServerModule m) {
+		srvModule = m;
+		INIT();
+	}
+	
+	public void INIT() {
 		//Begin Store Entries Region
 		storeEntries = new ArrayList<StoreTile>();
 		storeEntries.add(new StoreTile("Supporters", 100, 1, 0.05f));
