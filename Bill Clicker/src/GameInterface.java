@@ -350,10 +350,23 @@ public class GameInterface extends JFrame{
 		g2d.drawImage(horSep, billSupportArea.x, billSupportArea.y, billSupportArea.width, 16, this);
 		g2d.drawImage(vertSep, billPurchaseArea.x, billPurchaseArea.y, 16, billPurchaseArea.height, this);
 
+//Begin Timer Display Region *** Best Timer Display Ever ***
+		g2d.setColor(Color.BLACK);
+		g2d.fillArc(20, 500, 70, 70, 90, 360);
+		g2d.setColor(Color.RED);
+		g2d.fillArc(20, 500, 70, 70, 90, (int)(timePercent*-360));
+		g2d.drawString("Time Remaining: "+ (timeToPlay-currentTime)+" s", 20, 600);
+
+		
 		//Begin Graphics FINALIZE Region
 		Toolkit.getDefaultToolkit().sync();
 		bs.show();
 	}
+	
+	//Nasty Work That Richard Did
+	public double timeToPlay = 180;
+	public double currentTime = 0;
+	public double timePercent = 0.0;
 
 	public class WorldTimer implements ActionListener, MouseListener {
 		public Point cursorCoords;
@@ -373,6 +386,11 @@ public class GameInterface extends JFrame{
 				totalAppeal += appealPerSecond;
 				statusTicks++;
 				time = Calendar.getInstance().get(Calendar.SECOND);
+				currentTime++;
+				System.out.println(currentTime);
+				System.out.println(timeToPlay);
+				System.out.println(currentTime/timeToPlay);
+				timePercent = currentTime/timeToPlay;
 			}
 
 			//Begin Time Taking Region
