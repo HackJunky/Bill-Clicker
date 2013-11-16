@@ -61,7 +61,7 @@ public class GameInterface extends JFrame{
 	//Begin Bill Definitions Region
 	private int appealPerSecond = 0;
 	private int appealPerClick = 1;
-	private int totalAppeal = 2500;
+	private int totalAppeal = 3500;
 	private String billStatus = "We are waiting...";
 	private String billProgress = "Waiting...";
 	
@@ -483,7 +483,7 @@ public class GameInterface extends JFrame{
 				for (int i = 0; i < storeEntries.get(7).getOwned(); i++) {
 					ret += r.nextInt(5);
 				}
-				if (ret > 50) {
+				if (ret > 40) {
 					billStatus = progressList[4];
 				}else {
 					billStatus = failureList[4];
@@ -494,7 +494,7 @@ public class GameInterface extends JFrame{
 				for (int i = 0; i < storeEntries.get(8).getOwned(); i++) {
 					ret += r.nextInt(5);
 				}
-				if (ret > 50) {
+				if (ret > 30) {
 					billStatus = progressList[5];
 				}else {
 					billStatus = failureList[5];
@@ -505,7 +505,7 @@ public class GameInterface extends JFrame{
 				for (int i = 0; i < storeEntries.get(9).getOwned(); i++) {
 					ret += r.nextInt(5);
 				}
-				if (ret > 50) {
+				if (ret > 20) {
 					billStatus = progressList[6];
 				}else {
 					billStatus = failureList[6];
